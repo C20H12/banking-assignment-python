@@ -35,7 +35,7 @@ class MyServer(BaseHTTPRequestHandler):
     return self.rfile.read(int(self.headers.get("Content-Length")))
 
   def do_GET(self):
-    if self.path == '/':
+    if self.getStrippedPath() == '':
       self.respond(200, {"Content-type": "text/html"}, self.readFile(filesMap['index.html']))
     elif self.getStrippedPath() in filesMap:
       self.respond(200, {"Content-type": "text/html"}, self.readFile(filesMap[self.getStrippedPath()]))

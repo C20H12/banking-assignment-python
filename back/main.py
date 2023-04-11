@@ -1,8 +1,13 @@
 from MyServer import MyServer
 from http.server import HTTPServer
+from os import path
+
+url = "localhost"
+if path.exists(path.join(path.dirname(__file__), '..', '.replit')):
+  url = "0.0.0.0"
 
 
-webServer = HTTPServer(("localhost", 8080), MyServer)
+webServer = HTTPServer(url, 8080), MyServer
 print("started")
 
 try:
