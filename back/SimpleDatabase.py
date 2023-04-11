@@ -2,11 +2,8 @@ from os import path
 from typing import Optional
 
 class SimpleDb:
-  def __init__(self, fileName: str, testing=True):
+  def __init__(self, fileName: str):
     self.filePath = path.join(path.dirname(__file__), fileName)
-    with open(self.filePath, 'w+') as file:
-      if testing:
-        file.write('')
 
   def getValue(self, key: str) -> Optional[str]:
     with open(self.filePath, "r") as file:
@@ -32,6 +29,7 @@ class SimpleDb:
 
   def insertValue(self, key: str, value) -> bool:
     try:
+      self.popEntry(key)
       with open(self.filePath, "a+") as file:
         file.write(f"{key} <<separator>> {value}\n")
     except:

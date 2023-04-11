@@ -14,8 +14,10 @@ print(db.getValue("k4"))
 
 print(db.getValue("k4"))
 
-print(db.getValue("k22"))
-
 print(db.getValue("k12"))
+
+print(db.getValue("k22"))
 print(db.getValue("k25"))
 print(db.getValue("k26"))
+
+db.insertValue('k12', 'new')

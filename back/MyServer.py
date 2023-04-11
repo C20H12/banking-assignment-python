@@ -1,6 +1,8 @@
 from http.server import BaseHTTPRequestHandler
 from os import path
 from glob import glob
+import json
+from Account import Account
 
 
 frontEndDir = path.join(path.dirname(__file__), "..", "front")
@@ -10,9 +12,6 @@ filesMap = {fileName: filePath for fileName, filePath in zip(frontEndFileNames, 
 
 
 class MyServer(BaseHTTPRequestHandler):
-
-  def write_response(self, content: str):
-    return self.wfile.write(bytes(content, 'utf-8'))
   
   def respond(self, code: int, headers: dict, content: str):
     self.send_response(code)
@@ -32,7 +31,13 @@ class MyServer(BaseHTTPRequestHandler):
     return self.path.split("?")[1].split("&")
   
   def getPostContent(self):
-    return self.rfile.read(int(self.headers.get("Content-Length")))
+    return self.rfile.read(int(self.headers.get("Content-Length"))).decode('utf-8')
+
+  def sendNotFound(self):
+    self.respond(404, {}, "<h1>404 Not Found</h1>")
+  
+  def sendUnauthorized(self, jsonMsg):
+    self.respond(401, {"WWW-Authenticate": "Basic realm=\"Login Required\""}, f'''{{}}''')
 
   def do_GET(self):
     if self.getStrippedPath() == '':
@@ -43,7 +48,17 @@ class MyServer(BaseHTTPRequestHandler):
       self.respond(404, {}, "<h1>404 Not Found</h1>")
   
   def do_POST(self):
-    print("post", self.rfile.read(int(self.headers.get("Content-Length"))))
+    dataRecieved = json.loads(self.getPostContent())
+    action = dataRecieved['action']
+    username = dataRecieved['data']['bank-ass-username']
+    password = dataRecieved['data']['bank-ass-password']
+    
+    if action == "login":
+      account = Account(username, password)
+      if not account.isSaved():
+        pass
+        
+
     self.send_response(200)
     self.send_header("Content-type", "text/html")
     self.end_headers()

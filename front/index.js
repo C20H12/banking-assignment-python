@@ -1,18 +1,14 @@
 const loginBtn = document.querySelector("#login");
 const registerBtn = document.querySelector("#register");
-const form = document.querySelector("#form");
-const output = document.querySelector("#output-message")
+const output = document.querySelector("#output-message");
+const inputFields = document.querySelectorAll("[data-input-field]");
 
-form.addEventListener("submit", e => {
-  e.preventDefault();
-})
 
 function getFormEntries() {
-  const formData = new FormData(form);
   const formEntries = {}
-  for (const [name, value] of formData) {
-    formEntries[name] = value;
-  }
+  inputFields.forEach(inputField => {
+    formEntries[inputField.name] = inputField.value;
+  })
   return formEntries;
 }
 
