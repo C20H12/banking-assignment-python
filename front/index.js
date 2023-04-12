@@ -1,7 +1,9 @@
 const loginFormBtns = document.querySelectorAll("[data-login-form-btn]");
 const inputFields = document.querySelectorAll("[data-login-input-field]");
+const output = document.querySelector("#output-message");
 
-function getFormEntries() {
+
+function getAccountData() {
   const formEntries = {}
   inputFields.forEach(inputField => {
     formEntries[inputField.name] = inputField.value;
@@ -12,12 +14,13 @@ function getFormEntries() {
 loginFormBtns.forEach(btn => {
   btn.addEventListener("click", () => {
     console.log("btn clicked", btn.value)
-    fetch("/", {
+    fetch("/account", {
       method: "POST",
       headers: {'Content-Type': 'application/json'}, 
       body: JSON.stringify({
         action: btn.value, 
-        data: getFormEntries()
+        data: null,
+        accountInfo: getAccountData()
       })
     })
     .then(res => res.json())
@@ -28,6 +31,5 @@ loginFormBtns.forEach(btn => {
 })
 
 
-const output = document.querySelector("#output-message");
 
 

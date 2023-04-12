@@ -1,1 +1,0 @@
-chad <<separator>> {"time": "2023-Apr-11 23:50:28", "amount": 1888, "reason": Transfer from bob, "balance": 1988}

@@ -10,18 +10,18 @@ class Account:
   def __init__(self, username: str, password: str = '', asTransferTarget: bool = False):
     self.username = username
     self.password = password
-    self.balance = 100
-    self.exists = accountsDatabase.getValue(self.username) is not None
+    dataBaseEntry = accountsDatabase.getValue(self.username)
+    self.exists = dataBaseEntry is not None
     if not self.exists:
       return
-    self.authenticated = accountsDatabase.getValue(self.username) == self.password
+    self.authenticated = dataBaseEntry == self.password
     if not self.authenticated:
       if asTransferTarget:
         self.authenticated = True
       return
-    self.balance = int(balancesDatabase.getValue(self.username))
+    self.balance = int(balancesDatabase.getValue(self.username) or 100)
   
-  def validateAccount(self):
+  def _validateAccount(self):
     if self.exists is False:
       raise Exception("account_does_not_exist")
     if self.authenticated is False:
@@ -32,8 +32,8 @@ class Account:
     self.authenticated = True
     return accountsDatabase.insertValue(self.username, self.password)
   
-  def validateTransaction(self, amount):
-    self.validateAccount()
+  def _validateTransaction(self, amount):
+    self._validateAccount()
     if self.balance < -amount:
       raise Exception("not_enough_money")
     if amount == 0:
@@ -43,7 +43,7 @@ class Account:
     return transactionsDatabase.getValue(self.username)
   
   def addTransaction(self, amount: int, reason: str):
-    self.validateTransaction(amount)
+    self._validateTransaction(amount)
     self.balance += amount
     formattedTime = datetime.now().strftime('%Y-%b-%d %H:%M:%S')
     transactionLogStr = \
@@ -60,7 +60,7 @@ class Account:
     target.addTransaction(amount, f"Transfer from {self.username}")
 
   def delete(self, password: str):
-    self.validateAccount()
+    self._validateAccount()
     if self.password != password:
       raise Exception("wrong_password_for_delete")
     self.exists = False
@@ -69,7 +69,7 @@ class Account:
     balancesDatabase.popEntry(self.username)
   
   def changePassword(self, newPass: str):
-    self.validateAccount()
+    self._validateAccount()
     self.password = newPass
     accountsDatabase.insertValue(self.username, newPass)
   
