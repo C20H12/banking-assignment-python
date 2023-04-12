@@ -1,8 +1,5 @@
-const loginBtn = document.querySelector("#login");
-const registerBtn = document.querySelector("#register");
-const output = document.querySelector("#output-message");
-const inputFields = document.querySelectorAll("[data-input-field]");
-
+const loginFormBtns = document.querySelectorAll("[data-login-form-btn]");
+const inputFields = document.querySelectorAll("[data-login-input-field]");
 
 function getFormEntries() {
   const formEntries = {}
@@ -12,33 +9,25 @@ function getFormEntries() {
   return formEntries;
 }
 
-loginBtn.addEventListener("click", () => {
-  fetch("/", {
-    method: "POST",
-    headers: {'Content-Type': 'application/json'}, 
-    body: JSON.stringify({
-      action: "login", 
-      data: getFormEntries()
+loginFormBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    console.log("btn clicked", btn.value)
+    fetch("/", {
+      method: "POST",
+      headers: {'Content-Type': 'application/json'}, 
+      body: JSON.stringify({
+        action: btn.value, 
+        data: getFormEntries()
+      })
     })
+    .then(res => res.json())
+    .then(res => {
+      console.log("Request complete:", res);
+    });
   })
-  .then(res => res.json())
-  .then(res => {
-    console.log("Request complete! response:", res);
-  });
 })
 
-registerBtn.addEventListener("click", () => {
-  fetch("/", {
-    method: "POST",
-    headers: {'Content-Type': 'application/json'}, 
-    body: JSON.stringify({
-      action: "register", 
-      data: getFormEntries()
-    })
-  })
-  .then(res => res.json())
-  .then(res => {
-    console.log("Request complete! response:", res);
-  });
-})
+
+const output = document.querySelector("#output-message");
+
 

@@ -4,22 +4,63 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="data:,">
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16x16.png">
   <title>Banking assignment: home</title>
 
+  <link rel="stylesheet" href="./index.css">
   <script src="./index.js" defer></script>
 </head>
 <body>
   <h1>Welcome to Fishy Bank</h1>
+  <img src="./fish.png" alt="fish">
   <h2>Login Here</h2>
+
   <div id="form">
     <label for="input-username">Username: </label>
-    <input type="text" id="input-username" name="bank-ass-username" value="1" data-input-field>
+    <input type="text" id="input-username" name="bank-ass-username" value="1" data-login-input-field>
     <label for="input-password">Password: </label>
-    <input type="text" id="input-password" name="bank-ass-password" value="1" data-input-field>
-    <button id="login">Login</button>
-    <button id="register">Register</button>
+    <input type="text" id="input-password" name="bank-ass-password" value="1" data-login-input-field>
+    <button value="login" data-login-form-btn>Login</button>
+    <button value="register" data-login-form-btn>Register</button>
   </div>
+
   <output id="output-message"></output>
+
+  <div id="transac-log">
+  </div>
+
+  <div class="actions">
+    <fieldset data-action-area>
+      <legend>Deposit</legend>
+      <input type="number" placeholder="1" id="deposit-amount" data-action-input-field>
+      <button value="deposit">Go</button>
+    </fieldset>
+    <fieldset data-action-area>
+      <legend>Withdraw</legend>
+      <input type="number" placeholder="1" id="withdraw-amount" data-action-input-field>
+      <button value="withdraw">Go</button>
+    </fieldset>
+    <fieldset data-action-area>
+      <legend>Transfer</legend>
+      <input type="number" placeholder="1" id="transfer-amount" data-action-input-field>
+      <input type="text" placeholder="Bob" id="transfer-target" data-action-input-field>
+      <button value="transfer">Go</button>
+    </fieldset>
+    <fieldset data-action-area>
+      <legend>Logout</legend>
+      <button value="logout">Logout</button>
+    </fieldset>
+    <fieldset data-action-area>
+      <legend>Change Password</legend>
+      <input type="number" placeholder="1" id="change-passord-new" data-action-input-field>
+      <button value="change-pass">Change</button>
+    </fieldset>
+    <fieldset data-action-area>
+      <legend>Delete Account</legend>
+      <button value="delete">Delete</button>
+    </fieldset>
+  </div>
+
 </body>
 </html>
