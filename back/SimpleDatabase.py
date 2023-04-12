@@ -2,8 +2,11 @@ from os import path
 from typing import Optional
 
 class SimpleDb:
-  def __init__(self, fileName: str):
+  def __init__(self, fileName: str, testing=True):
     self.filePath = path.join(path.dirname(__file__), fileName)
+    if not path.exists(self.filePath) or testing:
+      with open(self.filePath, "w") as file:
+        file.write("")
 
   def getValue(self, key: str) -> Optional[str]:
     with open(self.filePath, "r") as file:
