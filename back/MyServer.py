@@ -1,7 +1,7 @@
-from Account import Account
+from Account import Account, AccountError
 from glob import glob
 from http.server import BaseHTTPRequestHandler
-import json
+from json import dumps as JSON_stringify, loads as JSON_parse
 from mimetypes import guess_type
 from os import path
 from typing import Union
@@ -38,19 +38,18 @@ class MyServer(BaseHTTPRequestHandler):
   def sendNotFound(self):
     self.respond(404, {"Content-type": "text/html"}, "<h1>404 Not Found</h1>")
   
-  def sendUnauthorized(self, jsonMsg: str):
+  def sendUnauthorized(self, msg: str):
     self.respond(
       401, 
-      {"Authorization": "BasicCustom",
-       "Content-type": "text/json"}, 
-      jsonMsg
+      {"Authorization": "BasicCustom", "Content-type": "text/json"}, 
+      JSON_stringify({"message": msg})
     )
 
   def sendForbidden(self):
-    self.respond(403, {"Content-type": "text/json"}, '''{"message": "do not POST to here"}''')
+    self.respond(403, {"Content-type": "text/json"}, JSON_stringify({"message": "Do not POST here"}))
   
-  def sendSuccess(self, jsonMsg: str):
-    self.respond(200, {"Content-type": "text/json"}, jsonMsg)
+  def sendSuccess(self, msg: str, data=[]):
+    self.respond(200, {"Content-type": "text/json"}, JSON_stringify({"message": msg, "data": data}))
 
   def do_GET(self):
     if self.getStrippedPath() == '':
@@ -67,7 +66,7 @@ class MyServer(BaseHTTPRequestHandler):
       self.sendForbidden()
       return
     
-    recieved = json.loads(self.getPostContent())
+    recieved = JSON_parse(self.getPostContent())
     action = recieved['action']
     data = recieved['data']
     accountInfo = recieved['accountInfo']
@@ -76,22 +75,47 @@ class MyServer(BaseHTTPRequestHandler):
 
     if action == "login":
       if not account.exists:
-        self.sendUnauthorized('''{"message": "Account does not exist, register first"}''')
+        self.sendUnauthorized("Account does not exist, register first")
         return
       if not account.authenticated:
-        self.sendUnauthorized('''{"message": "Wrong password"}''')
+        self.sendUnauthorized("Wrong password")
         return
-      self.sendSuccess(f'''{{"message": "Succesfully logged in", "data": [{account.getTransactions() or ''}]}}''')
+      self.sendSuccess("Succesfully logged in", account.getTransactions())
 
     if action == "register":
       if account.exists:
-        self.sendUnauthorized('''{"message": "Account already exists, go login"}''')
+        self.sendUnauthorized("Account already exists, go login")
         return
       account.saveAccount()
-      self.sendSuccess('''{"message": "Account created"}''')
+      self.sendSuccess("Account created")
     
-    if action == "deposit":
-      pass
+    try:
+      if action == "deposit":
+        account.addTransaction(float(data['deposit-amount']), "Deposit")
+        self.sendSuccess("Deposit succesful", account.getTransactions())
+      
+      if action == "withdraw":
+        account.addTransaction(-float(data['withdraw-amount']), "Withdraw")
+        self.sendSuccess("Withdraw succesful", account.getTransactions())
+      
+      if action == "transfer":
+        account.transferTo(Account(data['transfer-target'], asTransferTarget=True), float(data['transfer-amount']))
+        self.sendSuccess("Transfer succesful", account.getTransactions())
+
+      if action == "logout":
+        self.sendSuccess("Logged out")
+
+      if action == "change-pass":
+        account.changePassword(data['change-password-new'])
+        self.sendSuccess("Password changed")
+      
+      if action == "delete":
+        account.delete(data['delete-password-confirm'])
+        self.sendSuccess("Account deleted")
     
-
-
+    except AccountError as ae:
+      self.sendUnauthorized(f"Account Error: {ae}")
+      return
+    
+    except Exception as ex:
+      self.respond(500, {"Content-type": "text/json"}, f"Internal server error: {ex}")

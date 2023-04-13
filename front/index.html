@@ -27,37 +27,50 @@
 
   <output id="output-message"></output>
 
-  <div id="transac-log">
+  <div id="transac-log-area">
+    <div class="header">
+      <span>Time</span>
+      <span>Amount</span>
+      <span>Reason</span>
+      <span>Balance</span>
+    </div>
   </div>
 
   <div class="actions">
     <fieldset data-action-area>
       <legend>Deposit</legend>
       <input type="number" placeholder="1" id="deposit-amount" data-action-input-field>
+      <output></output>
       <button value="deposit">Go</button>
     </fieldset>
     <fieldset data-action-area>
       <legend>Withdraw</legend>
       <input type="number" placeholder="1" id="withdraw-amount" data-action-input-field>
+      <output></output>
       <button value="withdraw">Go</button>
     </fieldset>
     <fieldset data-action-area>
       <legend>Transfer</legend>
       <input type="number" placeholder="1" id="transfer-amount" data-action-input-field>
       <input type="text" placeholder="Bob" id="transfer-target" data-action-input-field>
+      <output></output>
       <button value="transfer">Go</button>
     </fieldset>
     <fieldset data-action-area>
       <legend>Logout</legend>
+      <output></output>
       <button value="logout">Logout</button>
     </fieldset>
     <fieldset data-action-area>
       <legend>Change Password</legend>
       <input type="number" placeholder="1" id="change-passord-new" data-action-input-field>
+      <output></output>
       <button value="change-pass">Change</button>
     </fieldset>
     <fieldset data-action-area>
       <legend>Delete Account</legend>
+      <input type="number" placeholder="1" id="delete-password-confirm" data-action-input-field>
+      <output></output>
       <button value="delete">Delete</button>
     </fieldset>
   </div>

@@ -1,0 +1,1 @@
+1 <<separator>> {"time": "2023-Apr-13 10:25:50", "amount": 100, "reason": "initial balance, the benevolence", "balance": 100}

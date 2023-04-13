@@ -1,10 +1,14 @@
 from SimpleDatabase import SimpleDb
 from datetime import datetime
+from json import dumps as JSON_stringify, loads as JSON_parse
 
 # TODO: add false for isTesting
 accountsDatabase = SimpleDb("data_files/accounts.txt")
 balancesDatabase = SimpleDb("data_files/balances.txt")
 transactionsDatabase = SimpleDb("data_files/transactions.txt")
+
+class AccountError(Exception):
+  pass
 
 class Account:
   def __init__(self, username: str, password: str = '', asTransferTarget: bool = False):
@@ -12,6 +16,8 @@ class Account:
     self.password = password
     dataBaseEntry = accountsDatabase.getValue(self.username)
     self.exists = dataBaseEntry is not None
+    self.authenticated = False
+    self.balance = 0
     if not self.exists:
       return
     self.authenticated = dataBaseEntry == self.password
@@ -23,46 +29,55 @@ class Account:
   
   def _validateAccount(self):
     if self.exists is False:
-      raise Exception("account_does_not_exist")
+      raise AccountError("Account does not exist")
     if self.authenticated is False:
-      raise Exception("not_authenticated")
+      raise AccountError("Not authenticated")
 
   def saveAccount(self):
     self.exists = True
     self.authenticated = True
-    return accountsDatabase.insertValue(self.username, self.password)
+    accountsDatabase.insertValue(self.username, self.password)
+    self.addTransaction(100, "initial balance, the benevolence")
   
   def _validateTransaction(self, amount):
     self._validateAccount()
     if self.balance < -amount:
-      raise Exception("not_enough_money")
+      raise AccountError("Not enough funds")
     if amount == 0:
-      raise Exception("zero_amount")
+      raise AccountError("Zero amount")
   
-  def getTransactions(self):
-    return transactionsDatabase.getValue(self.username)
+  def getTransactions(self) -> list:
+    transactions =  transactionsDatabase.getValue(self.username)
+    if transactions == None:
+      return []
+    return JSON_parse(f"[{transactions}]")
+    
   
   def addTransaction(self, amount: int, reason: str):
     self._validateTransaction(amount)
     self.balance += amount
     formattedTime = datetime.now().strftime('%Y-%b-%d %H:%M:%S')
-    transactionLogStr = \
-      f'''{{"time": "{formattedTime}", "amount": {amount}, "reason": {reason}, "balance": {self.balance}}}'''
-    prevTransactions = self.getTransactions()
-    prevTransactions = prevTransactions + ',' if prevTransactions is not None else ""
+    transactionLogObj = {
+      "time": formattedTime,
+      "amount": amount,
+      "reason": reason,
+      "balance": self.balance
+    }
+    transactionLogStr = JSON_stringify(transactionLogObj)
+    prevTransactions = ','.join(self.getTransactions())
     transactionsDatabase.insertValue(self.username, f"{prevTransactions}{transactionLogStr}")
     balancesDatabase.insertValue(self.username, self.balance)
 
   def transferTo(self, target: 'Account', amount: int):
     if target.exists is False:
-      raise Exception("target_does_not_exist")
+      raise AccountError("target_does_not_exist")
     self.addTransaction(-amount, f"Transfer to {target.username}")
     target.addTransaction(amount, f"Transfer from {self.username}")
 
   def delete(self, password: str):
     self._validateAccount()
     if self.password != password:
-      raise Exception("wrong_password_for_delete")
+      raise AccountError("wrong_password_for_delete")
     self.exists = False
     accountsDatabase.popEntry(self.username)
     transactionsDatabase.popEntry(self.username)
