@@ -12,67 +12,89 @@
   <script src="./index.js" defer></script>
 </head>
 <body>
-  <h1>Welcome to Fishy Bank</h1>
-  <img src="./fish.png" alt="fish">
-  <h2>Login Here</h2>
-
-  <div id="form">
-    <label for="input-username">Username: </label>
-    <input type="text" id="input-username" name="username" value="1" data-login-input-field>
-    <label for="input-password">Password: </label>
-    <input type="text" id="input-password" name="password" value="1" data-login-input-field>
-    <button value="login" data-login-form-btn>Login</button>
-    <button value="register" data-login-form-btn>Register</button>
+  <div class="banner">  
+    <img src="./fish.png" alt="fish">
+    <h1>Welcome to Fishy Bank</h1>
+    <button onclick="document.body.classList.toggle('dark')">dark theme</button>
   </div>
 
-  <output id="output-message"></output>
+  <div class="login area">
+    <h2>Login Here</h2>
 
-  <div id="transac-log-area">
+    <div id="form">
+      <label for="input-username">Username: </label>
+      <input type="text" id="input-username" name="username" value="1" data-login-input-field>
+      <label for="input-password">Password: </label>
+      <input type="text" id="input-password" name="password" value="1" data-login-input-field>
+      <button value="login" data-login-form-btn>Login</button>
+      <button value="register" data-login-form-btn>Register</button>
+    </div>
+
+    <output id="login-output-message"></output>
+  </div>
+
+  <div class="transactions area">
+    <h2>Transactions</h2>
+
     <div class="header">
       <span>Time</span>
       <span>Amount</span>
       <span>Reason</span>
       <span>Balance</span>
     </div>
+    <div id="transac-logs">
+    </div>
   </div>
 
-  <div class="actions">
-    <fieldset data-action-area>
-      <legend>Deposit</legend>
-      <input type="number" placeholder="1" id="deposit-amount" data-action-input-field>
-      <output></output>
-      <button value="deposit">Go</button>
-    </fieldset>
-    <fieldset data-action-area>
-      <legend>Withdraw</legend>
-      <input type="number" placeholder="1" id="withdraw-amount" data-action-input-field>
-      <output></output>
-      <button value="withdraw">Go</button>
-    </fieldset>
-    <fieldset data-action-area>
-      <legend>Transfer</legend>
-      <input type="number" placeholder="1" id="transfer-amount" data-action-input-field>
-      <input type="text" placeholder="Bob" id="transfer-target" data-action-input-field>
-      <output></output>
-      <button value="transfer">Go</button>
-    </fieldset>
-    <fieldset data-action-area>
-      <legend>Logout</legend>
-      <output></output>
-      <button value="logout">Logout</button>
-    </fieldset>
-    <fieldset data-action-area>
-      <legend>Change Password</legend>
-      <input type="number" placeholder="1" id="change-passord-new" data-action-input-field>
-      <output></output>
-      <button value="change-pass">Change</button>
-    </fieldset>
-    <fieldset data-action-area>
-      <legend>Delete Account</legend>
-      <input type="number" placeholder="1" id="delete-password-confirm" data-action-input-field>
-      <output></output>
-      <button value="delete">Delete</button>
-    </fieldset>
+
+  <div class="actions area">
+    <h2>Actions</h2>
+
+    <div class="action-areas">
+      <fieldset data-action-area>
+        <legend>Deposit</legend>
+        <label for="deposit-amount">Amount: </label>
+        <input type="number" placeholder="1" id="deposit-amount" data-action-input-field>
+        <output></output>
+        <button value="deposit">Go</button>
+      </fieldset>
+      <fieldset data-action-area>
+        <legend>Withdraw</legend>
+        <label for="withdraw-amount">Amount: </label>
+        <input type="number" placeholder="1" id="withdraw-amount" data-action-input-field>
+        <output></output>
+        <button value="withdraw">Go</button>
+      </fieldset>
+      <fieldset data-action-area>
+        <legend>Transfer</legend>
+        <label for="transfer-amount">Amount: </label>
+        <input type="number" placeholder="1" id="transfer-amount" data-action-input-field>
+        <label for="transfer-target">Target: </label>
+        <input type="text" placeholder="Bob" id="transfer-target" data-action-input-field>
+        <output></output>
+        <button value="transfer">Go</button>
+      </fieldset>
+      <fieldset data-action-area>
+        <legend>Change Password</legend>
+        <label for="change-password-new">New password: </label>
+        <input type="number" placeholder="1" id="change-password-new" data-action-input-field>
+        <output></output>
+        <button value="change-pass">Change</button>
+      </fieldset>
+      <fieldset data-action-area>
+        <legend>Delete Account</legend>
+        <label for="delete-password-confirm">Confirm password: </label>
+        <input type="number" placeholder="1" id="delete-password-confirm" data-action-input-field>
+        <output></output>
+        <button value="delete">Delete</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Logout</legend>
+        <output></output>
+        <button id="logout-btn">Logout</button>
+      </fieldset>
+    </div>
   </div>
 
 </body>

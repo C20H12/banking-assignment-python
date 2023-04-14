@@ -1,0 +1,99 @@
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+  background-color: var(--light-background);
+  color: var(--light-text);
+  margin: 0;
+  padding: 0;
+  --light-text: #333;
+  --light-background: #f1f1f1;
+  --dark-text: #dfd4ff;
+  --dark-background: #3e3939;
+}
+body.dark {
+  background-color: var(--dark-background);
+  color: var(--dark-text);
+}
+
+
+.banner {
+  height: 10rem;
+  padding: 1rem;
+}
+
+.banner img {
+  height: 90%;
+  float: left;
+  border-radius: 20%;
+  box-shadow: 0 0 15px #ccc;
+}
+.banner h1 {
+  display: inline-block;
+  font-size: 2rem;
+  vertical-align: middle;
+  margin-left: 2rem;
+}
+.banner button {
+  float: right;
+  border-radius: 40%;
+}
+
+.area {
+  border: 2px solid black;
+  border-radius: 15px;
+  margin: 2rem auto;
+  width: 80vw;
+  padding: 1rem;
+}
+
+.login output {
+  font-size: 1.1rem;
+  display: inline-block;
+  margin: .5rem 0;
+  color: #8c0000;
+}
+
+.transactions > .header, #transac-logs > .row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  font-size: 1.1rem;
+}
+.transactions > .header {
+  font-weight: bold;
+  border-bottom: 1px solid black;
+}
+
+.actions > .action-areas {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 1rem
+}
+.action-areas legend {
+  font-weight: bold;
+}
+.action-areas :is(input, button) {
+  width: 90%;
+  margin: .3rem auto;
+  height: 1.5rem;
+}
+.action-areas label {
+  float: left;
+  width: 200px;
+}
+.action-areas output {
+  display: inline-block;
+  width: 100%;
+  font-weight: bold;
+  color: #8c0000;
+}
+.action-areas button {
+  background-color: #f1f1f1;
+  border: 1px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  height: 1.8rem;
+}
+.action-areas button:hover {
+  background-color: #c1bfbf;
+}
