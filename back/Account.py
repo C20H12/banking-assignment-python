@@ -24,7 +24,6 @@ class Account:
     if not self.authenticated:
       if asTransferTarget:
         self.authenticated = True
-      return
     self.balance = float(balancesDatabase.getValue(self.username) or 100)
   
   def _validateAccount(self):

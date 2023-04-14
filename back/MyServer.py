@@ -130,5 +130,6 @@ class MyServer(BaseHTTPRequestHandler):
       self.sendUnauthorized(f"Account Error: {ae}")
       return
     
-    # except Exception as ex:
-    #   self.sendError(f"Internal Error: {ex}")
+    except Exception as ex:
+      print(ex)
+      self.sendError(f"Internal Error: {ex}")

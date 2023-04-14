@@ -1,2 +1,2 @@
-bob <<separator>> 1.0
-1 <<separator>> 100
+1 <<separator>> 99.0
+13 <<separator>> 101.0
