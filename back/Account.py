@@ -25,7 +25,7 @@ class Account:
       if asTransferTarget:
         self.authenticated = True
       return
-    self.balance = int(balancesDatabase.getValue(self.username) or 100)
+    self.balance = float(balancesDatabase.getValue(self.username) or 100)
   
   def _validateAccount(self):
     if self.exists is False:
@@ -50,34 +50,35 @@ class Account:
     transactions =  transactionsDatabase.getValue(self.username)
     if transactions == None:
       return []
-    return JSON_parse(f"[{transactions}]")
+    return JSON_parse(f"{transactions}")
     
   
   def addTransaction(self, amount: int, reason: str):
     self._validateTransaction(amount)
     self.balance += amount
+    prevTransactions = self.getTransactions()
+
     formattedTime = datetime.now().strftime('%Y-%b-%d %H:%M:%S')
-    transactionLogObj = {
+    prevTransactions.append({
       "time": formattedTime,
       "amount": amount,
       "reason": reason,
       "balance": self.balance
-    }
-    transactionLogStr = JSON_stringify(transactionLogObj)
-    prevTransactions = ','.join(self.getTransactions())
-    transactionsDatabase.insertValue(self.username, f"{prevTransactions}{transactionLogStr}")
+    })
+    transactionLogsStr = JSON_stringify(prevTransactions)
+    transactionsDatabase.insertValue(self.username, transactionLogsStr)
     balancesDatabase.insertValue(self.username, self.balance)
 
   def transferTo(self, target: 'Account', amount: int):
     if target.exists is False:
-      raise AccountError("target_does_not_exist")
+      raise AccountError("Target does not exist")
     self.addTransaction(-amount, f"Transfer to {target.username}")
     target.addTransaction(amount, f"Transfer from {self.username}")
 
   def delete(self, password: str):
     self._validateAccount()
     if self.password != password:
-      raise AccountError("wrong_password_for_delete")
+      raise AccountError("Incorrect password")
     self.exists = False
     accountsDatabase.popEntry(self.username)
     transactionsDatabase.popEntry(self.username)
