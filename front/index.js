@@ -1,15 +1,27 @@
 const loginFormBtns = document.querySelectorAll("[data-login-form-btn]");
-const inputFields = document.querySelectorAll("[data-login-input-field]");
-const output = document.querySelector("#output-message");
-const transacLogArea = document.querySelector("#transac-log-area");
+const loginInputFields = document.querySelectorAll("[data-login-input-field]");
+const loginOutput = document.querySelector("#login-output-message");
+const transacLogArea = document.querySelector("#transac-logs");
 
 
 function getAccountData() {
   const formEntries = {}
-  inputFields.forEach(inputField => {
+  loginInputFields.forEach(inputField => {
     formEntries[inputField.name] = inputField.value;
   })
   return formEntries;
+}
+
+function clearAccountData() {
+  loginInputFields.forEach(inputField => {
+    inputField.value = "";
+    inputField.removeAttribute("disabled")
+  })
+  loginOutput.value = "";
+  loginFormBtns.forEach(btn => {
+    btn.removeAttribute("disabled");
+  })
+  loginOutput.value = "You have been logged out";
 }
 
 function updateTransacLogs(transacArr) {
@@ -27,8 +39,22 @@ function updateTransacLogs(transacArr) {
   }
 }
 
+function hasEmptyFields(fields) {
+  for (const input of fields) {
+    if (input.value === "") {
+      return true;
+    }
+  }
+  return false;
+}
+
+
 loginFormBtns.forEach(btn => {
   btn.addEventListener("click", () => {
+    if (hasEmptyFields(loginInputFields)) {
+      actionOutput.value = "One or more fields are empty"
+      return;
+    }
     console.log("btn clicked", btn.value)
     fetch("/account", {
       method: "POST",
@@ -42,9 +68,13 @@ loginFormBtns.forEach(btn => {
     .then(res => res.json())
     .then(res => {
       console.log("Request complete:", res);
-      output.value = res.message;
-      if (res.data) {
+      loginOutput.value = res.message;
+      if (btn.value === "login" && res.data) {
         updateTransacLogs(res.data);
+
+        [...loginFormBtns, ...loginInputFields].forEach(element => {
+          element.setAttribute("disabled", "true");
+        })
       }
     })
     .catch(err => {
@@ -56,12 +86,17 @@ loginFormBtns.forEach(btn => {
 
 const actionAreas = document.querySelectorAll("[data-action-area]");
 actionAreas.forEach(area => {
-  const inputs = area.querySelectorAll("input");
+  const actionInputs = area.querySelectorAll("input");
   const btn = area.querySelector("button");
   const actionOutput = area.querySelector("output");
   btn.addEventListener("click", () => {
+    if (hasEmptyFields(actionInputs)) {
+      actionOutput.value = "One or more fields are empty"
+      return;
+    }
+    console.log("btn clicked", btn.value)
     const data = {}
-    inputs.forEach(input => {
+    actionInputs.forEach(input => {
       data[input.id] = input.value;
     })
     fetch("/account", {
@@ -79,6 +114,9 @@ actionAreas.forEach(area => {
       actionOutput.value = res.message;
       if (res.data) {
         updateTransacLogs(res.data);
+        if (res.message === "Account deleted") {
+          clearAccountData()
+        }
       }
     })
     .catch(err => {
@@ -87,4 +125,6 @@ actionAreas.forEach(area => {
   })
 })
 
+const logoutBtn = document.querySelector("#logout-btn");
+logoutBtn.addEventListener("click", clearAccountData)
 
