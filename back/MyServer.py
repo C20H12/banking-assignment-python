@@ -121,6 +121,9 @@ class MyServer(BaseHTTPRequestHandler):
         account.delete(data['delete-password-confirm'])
         self.sendSuccess("Account deleted")
 
+      if action == "refresh":
+        self.sendSuccess("Refresh succesful", account.getTransactions())
+
       # logout is handled by the front end
 
     except AccountError as ae:

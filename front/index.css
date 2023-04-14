@@ -45,6 +45,9 @@ body.dark {
   width: 80vw;
   padding: 1rem;
 }
+.area.hidden {
+  display: none;
+}
 
 .login output {
   font-size: 1.1rem;
@@ -58,9 +61,19 @@ body.dark {
   grid-template-columns: 1fr 1fr 1fr 1fr;
   font-size: 1.1rem;
 }
+.transactions h2 {
+  display: inline-block;
+}
+.transactions fieldset {
+  display: inline-block;
+  margin: 0 3em;
+}
 .transactions > .header {
   font-weight: bold;
   border-bottom: 1px solid black;
+}
+.transactions .row {
+  border-bottom: 1px dotted #aaa;
 }
 
 .actions > .action-areas {

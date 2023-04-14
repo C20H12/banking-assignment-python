@@ -33,8 +33,12 @@
     <output id="login-output-message"></output>
   </div>
 
-  <div class="transactions area">
+  <div class="transactions area hidden">
     <h2>Transactions</h2>
+
+    <fieldset data-action-area>
+      <button value="refresh">Refresh</button>
+    </fieldset>
 
     <div class="header">
       <span>Time</span>
@@ -47,28 +51,28 @@
   </div>
 
 
-  <div class="actions area">
+  <div class="actions area hidden">
     <h2>Actions</h2>
 
     <div class="action-areas">
       <fieldset data-action-area>
         <legend>Deposit</legend>
         <label for="deposit-amount">Amount: </label>
-        <input type="number" placeholder="1" id="deposit-amount" data-action-input-field>
+        <input type="number" step="0.01" placeholder="1" id="deposit-amount" data-action-input-field>
         <output></output>
         <button value="deposit">Go</button>
       </fieldset>
       <fieldset data-action-area>
         <legend>Withdraw</legend>
         <label for="withdraw-amount">Amount: </label>
-        <input type="number" placeholder="1" id="withdraw-amount" data-action-input-field>
+        <input type="number" step="0.01" placeholder="1" id="withdraw-amount" data-action-input-field>
         <output></output>
         <button value="withdraw">Go</button>
       </fieldset>
       <fieldset data-action-area>
         <legend>Transfer</legend>
         <label for="transfer-amount">Amount: </label>
-        <input type="number" placeholder="1" id="transfer-amount" data-action-input-field>
+        <input type="number" step="0.01" placeholder="1" id="transfer-amount" data-action-input-field>
         <label for="transfer-target">Target: </label>
         <input type="text" placeholder="Bob" id="transfer-target" data-action-input-field>
         <output></output>
@@ -77,14 +81,14 @@
       <fieldset data-action-area>
         <legend>Change Password</legend>
         <label for="change-password-new">New password: </label>
-        <input type="number" placeholder="1" id="change-password-new" data-action-input-field>
+        <input type="text" placeholder="1" id="change-password-new" data-action-input-field>
         <output></output>
         <button value="change-pass">Change</button>
       </fieldset>
       <fieldset data-action-area>
         <legend>Delete Account</legend>
         <label for="delete-password-confirm">Confirm password: </label>
-        <input type="number" placeholder="1" id="delete-password-confirm" data-action-input-field>
+        <input type="text" placeholder="1" id="delete-password-confirm" data-action-input-field>
         <output></output>
         <button value="delete">Delete</button>
       </fieldset>

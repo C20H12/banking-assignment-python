@@ -1,7 +1,12 @@
 const loginFormBtns = document.querySelectorAll("[data-login-form-btn]");
 const loginInputFields = document.querySelectorAll("[data-login-input-field]");
 const loginOutput = document.querySelector("#login-output-message");
+
+const transacArea = document.querySelector("div.transactions");
+const actionArea = document.querySelector('div.actions');
+
 const transacLogArea = document.querySelector("#transac-logs");
+const actionAreas = document.querySelectorAll("[data-action-area]");
 
 
 function getAccountData() {
@@ -22,6 +27,8 @@ function clearAccountData() {
     btn.removeAttribute("disabled");
   })
   loginOutput.value = "You have been logged out";
+  transacArea.classList.add('hidden')
+  actionArea.classList.add('hidden')
 }
 
 function updateTransacLogs(transacArr) {
@@ -39,20 +46,26 @@ function updateTransacLogs(transacArr) {
   }
 }
 
-function hasEmptyFields(fields) {
+function validateFields(fields) {
   for (const input of fields) {
     if (input.value === "") {
-      return true;
+      return [false, "One or more fields are empty"];
+    }
+    const inputStr = input.value.toString()
+    const decimalPlaces = inputStr.split(".")[1];
+    if (input.type === "number" && (inputStr === '0' || decimalPlaces?.length > 2)) {
+      return [false, "Invalid number"];
     }
   }
-  return false;
+  return [true, ''];
 }
 
 
 loginFormBtns.forEach(btn => {
   btn.addEventListener("click", () => {
-    if (hasEmptyFields(loginInputFields)) {
-      actionOutput.value = "One or more fields are empty"
+    const [isValid, invalidMsg] = validateFields(loginInputFields);
+    if (!isValid) {
+      loginOutput.value = invalidMsg;
       return;
     }
     console.log("btn clicked", btn.value)
@@ -75,6 +88,8 @@ loginFormBtns.forEach(btn => {
         [...loginFormBtns, ...loginInputFields].forEach(element => {
           element.setAttribute("disabled", "true");
         })
+        transacArea.classList.remove('hidden');
+        actionArea.classList.remove('hidden');
       }
     })
     .catch(err => {
@@ -84,14 +99,14 @@ loginFormBtns.forEach(btn => {
 })
 
 
-const actionAreas = document.querySelectorAll("[data-action-area]");
 actionAreas.forEach(area => {
   const actionInputs = area.querySelectorAll("input");
   const btn = area.querySelector("button");
   const actionOutput = area.querySelector("output");
   btn.addEventListener("click", () => {
-    if (hasEmptyFields(actionInputs)) {
-      actionOutput.value = "One or more fields are empty"
+    const [isValid, invalidMsg] = validateFields(actionInputs);
+    if (!isValid) {
+      actionOutput.value = invalidMsg;
       return;
     }
     console.log("btn clicked", btn.value)
@@ -111,7 +126,9 @@ actionAreas.forEach(area => {
     .then(res => res.json())
     .then(res => {
       console.log("Request complete:", res);
-      actionOutput.value = res.message;
+      if (actionOutput) {
+        actionOutput.value = res.message;
+      }
       if (res.data) {
         updateTransacLogs(res.data);
         if (res.message === "Account deleted") {
