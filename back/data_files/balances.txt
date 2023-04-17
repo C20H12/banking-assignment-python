@@ -1,2 +1,2 @@
-1 <<separator>> 99.0
-13 <<separator>> 101.0
+2 <<separator>> 89.0
+1 <<separator>> 111.0
