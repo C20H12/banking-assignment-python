@@ -53,7 +53,7 @@ body.dark {
   font-size: 1.1rem;
   display: inline-block;
   margin: .5rem 0;
-  color: #8c0000;
+  color: red;
 }
 
 .transactions > .header, #transac-logs > .row {
@@ -98,7 +98,7 @@ body.dark {
   display: inline-block;
   width: 100%;
   font-weight: bold;
-  color: #8c0000;
+  color: red;
 }
 .action-areas button {
   background-color: #f1f1f1;
