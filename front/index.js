@@ -85,7 +85,11 @@ function validateFields(fields) {
 
     // check if the input is a number and if it has more than 2 decimal places
     const decimalPlaces = inputStr.split(".")[1];
-    if (input.type === "number" && (inputStr === '0' || decimalPlaces?.length > 2)) {
+    if (input.type === "number" && 
+         (inputStr === '0' || 
+           decimalPlaces?.length > 2 || 
+           isNaN(parseFloat(inputStr)) || 
+           inputStr.startsWith('-'))) {
       return [false, "Invalid number"];
     }
   }
